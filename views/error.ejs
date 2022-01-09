@@ -1,0 +1,17 @@
+<% layout('./templates/viewTemplate') %>
+    <div class="row">
+        <div class="col-6 offset-3">
+            <div class="alert alert-danger text-wrap" role=" alert">
+                <h4 class="alert-heading">
+                    <%=err.message%>
+                </h4>
+                <p class="text-break">
+                    <% if (process.env.NODE_ENV !=='production' ) { %>
+                        <%= err.stack %>
+                            <% } else { %>
+
+                                <% } %>
+                </p>
+            </div>
+        </div>
+    </div>

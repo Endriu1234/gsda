@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSDA - Genetic Suite Development Assistant</title>
+    <link href="../bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/app.css">
+
+</head>
+
+<body>
+    <%- include('topnavbar')%>
+    <%- include('sidebar')%>
+    <main class="mt-5 pt-3">
+        <div class="container-fluid">
+            <%- include('flash')%>
+            <%- body %>
+        </div>
+    </main>
+
+    <script src="../@popperjs/core/dist/umd/popper.min.js"></script>
+    <script src="../bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/js/validateForms.js"></script>
+</body>
+
+</html>
