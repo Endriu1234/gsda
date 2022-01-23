@@ -49,7 +49,7 @@ const reqisteredCaches = {
     'redmine_users': async () => {
         let uniqueUsersId = new Set();
         let memberships = await getValue('redmine_projects_memberships');
-        console.log(' redmine_users: przeczytalem membershipy');
+
         let users = [];
 
         memberships.forEach(membership => {

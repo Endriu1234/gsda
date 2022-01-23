@@ -1,12 +1,18 @@
 <% layout('templates/viewTemplate') %>
+
 <div class="row">
     <div class="col-12">
         <h1 class="text-center">Create Custom Item</h1>
         <div class="col-lg-8 offset-lg-2">
-            <form action="/campgrounds" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
+            <form action="/itemscreators/createcustomitem" method="POST" novalidate class="validated-form">
                 <div class="mb-3">
                     <label for="project" class="form-label">Project</label>
-                    <input class="form-control" list="projectOptions" id="project" placeholder="Type to search..." required>
+                    <input class="form-control" name="item[project]" list="projectOptions" id="project" placeholder="Type to search..."
+                        oninput="validateHtmlList(document, this, 'projectOptions', false)" required>
+
+                    <div class="invalid-feedback">
+                        Please select project from the list
+                    </div>
                     <datalist id="projectOptions">
                         <% projects.forEach(project => { %>
                             <option value="<%=project.name%>">
@@ -16,9 +22,9 @@
                 <div class="mb-3">
                     <% trackers.forEach((tracker, index) => { %>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="item[type]" id="typeRadio<%=index%>"
+                        <input class="form-check-input" type="radio" name="item[tracker]" id="trackerRadio<%=index%>"
                         value="<%=tracker.id%>" <% if(index === 0) { %>checked="checked" <%}%>>
-                        <label class="form-check-label" for="typeRadio<%=index%>"><%=tracker.name%></label>
+                        <label class="form-check-label" for="trackerRadio<%=index%>"><%=tracker.name%></label>
                     </div>
                     <% }); %>
                 </div>
@@ -39,7 +45,11 @@
                 </div>
                 <div class="mb-3">
                     <label for="assignee" class="form-label">Assignee</label>
-                    <input class="form-control" list="assigneeOptions" id="assignee" placeholder="Type to search...">
+                    <input class="form-control" list="assigneeOptions" name="item[assignee]" id="assignee" placeholder="Type to search..."
+                        oninput="validateHtmlList(document, this, 'assigneeOptions', true)">
+                    <div class="invalid-feedback">
+                        Please select user from the list or leave this field empty
+                    </div>
                     <datalist id="assigneeOptions">
                         <% users.forEach(user => { %>
                             <option value="<%=user.name%>">
@@ -48,15 +58,15 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="tms">TMS Task</label>
-                    <input class="form-control" type="text" id="tms" name="item[tms]">
+                    <input class="form-control" type="text" id="tms" name="item[tms]" pattern="^[A-Z]{4,5}-[\d]{1,9}$">
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="issue">Issue</label>
-                    <input class="form-control" type="text" id="issue" name="item[issue]">
+                    <input class="form-control" type="text" id="issue" name="item[issue]" pattern="^ISS-[A-Z]{3,4}-[\d]{1,9}I[T|S]$">
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="cr">CR</label>
-                    <input class="form-control" type="text" id="cr" name="item[cr]">
+                    <input class="form-control" type="text" id="cr" name="item[cr]" pattern="^CR-[A-Z]{3,4}-[\d]{1,9}I[T|S]$">
                 </div>
                 <div class="mb-3">
                     <button class="btn btn-success">Create Item</button>

@@ -28,6 +28,7 @@ function setupViewsAndStatic(app, directory) {
 }
 
 function setupMiddleWares(app) {
+    console.log('setupMiddleWares');
     app.use(express.urlencoded({ extended: true }));
     app.use(methodOverride('_method'));
     app.use(mongoSanitize(

@@ -17,3 +17,28 @@
             }, false)
         })
 })()
+
+function validateHtmlList(htmlDocument, input, listId, allowEmpty) {
+    console.log('check triggered');
+
+    const list = htmlDocument.querySelector(`#${listId}`);
+
+    let isCorrect = false;
+
+    if (allowEmpty && !input.value)
+        isCorrect = true;
+    else {
+
+        for (const opt of list.options) {
+            if (input.value == opt.value) {
+                isCorrect = true;
+                break;
+            }
+        };
+    }
+
+    if (isCorrect)
+        input.setCustomValidity('');
+    else
+        input.setCustomValidity('Wrong value');
+}
