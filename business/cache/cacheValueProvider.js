@@ -1,4 +1,5 @@
 const axios = require('axios');
+const { getRedmineApiConfiguration, getRedmineAddress } = require('../redmine/tools/redmineConnectionTools');
 const NodeCache = require("node-cache");
 const cache = new NodeCache({ stdTTL: process.env.CACHE_TTL, checkperiod: process.env.CACHE_TTL * 0.2, useClones: false });
 
@@ -25,46 +26,21 @@ async function getValue(key) {
 
 const reqisteredCaches = {
     'redmine_projects': async () => {
-        let config = { 'X-Redmine-API-Key': process.env.REDMINE_API_KEY };
-        const result = await axios.get(`${process.env.REDMINE_ADDRESS}/projects.json`, { headers: config });
+        const result = await axios.get(getRedmineAddress('projects.json'), getRedmineApiConfiguration());
         return result.data.projects.sort((a, b) => a.name.localeCompare(b.name));
     },
     'redmine_trackers': async () => {
-        let config = { 'X-Redmine-API-Key': process.env.REDMINE_API_KEY };
-        const result = await axios.get(`${process.env.REDMINE_ADDRESS}/trackers.json`, { headers: config });
+        const result = await axios.get(getRedmineAddress('trackers.json'), getRedmineApiConfiguration());
         return result.data.trackers.sort((a, b) => a.name.localeCompare(b.name));
     },
-    'redmine_projects_memberships': async () => {
-        let memberships = [];
-        let config = { 'X-Redmine-API-Key': process.env.REDMINE_API_KEY };
-        let projects = await getValue('redmine_projects');
-
-        for (project of projects) {
-            let memberships_result = await axios.get(`${process.env.REDMINE_ADDRESS}/projects/${project.id}/memberships.json`, { headers: config });
-            memberships.push(...memberships_result.data.memberships);
-        }
-
-        return memberships;
-    },
     'redmine_users': async () => {
-        let uniqueUsersId = new Set();
-        let memberships = await getValue('redmine_projects_memberships');
-
-        let users = [];
-
-        memberships.forEach(membership => {
-
-            let user = membership.user;
-
-            if (user !== undefined) {
-                if (!uniqueUsersId.has(user.id)) {
-                    uniqueUsersId.add(user.id);
-                    users.push(membership.user);
-                }
-            }
-        });
-
-        return users.sort((a, b) => a.name.localeCompare(b.name));
+        const result = await axios.get(getRedmineAddress('users.json'), getRedmineApiConfiguration());
+        result.data.users.forEach(user => user.name = `${user.firstname} ${user.lastname}`);
+        return result.data.users.sort((a, b) => a.name.localeCompare(b.name));
+    },
+    'redmine_custom_fields': async () => {
+        const result = await axios.get(getRedmineAddress('custom_fields.json'), getRedmineApiConfiguration());
+        return result.data.custom_fields;
     }
 }
 

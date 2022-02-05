@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const itemsCreatorsController = require('../controllers/itemsCreatorsController');
-const redmineItemValidator = require('../business/validation/redmine/redmineItemMiddlewareValidator');
+const redmineItemValidator = require('../business/redmine/validation/redmineItemMiddlewareValidator');
 
 const catchAsync = require('../utils/catchAsync');
 
