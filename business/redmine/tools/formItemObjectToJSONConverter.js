@@ -21,22 +21,22 @@ module.exports.convertFormItemObjectToJSON = async function convertFormItemObjec
     const customFields = await cacheValueProvider.getValue('redmine_custom_fields');
     const custom_fields = [];
 
-    if (formItem.tms) {
-        const tmsCustomField = customFields.find((i) => i.name === 'TMS Task');
+    if (process.env.REDMINE_TMS_TASK_NAME && formItem.tms) {
+        const tmsCustomField = customFields.find((i) => i.name === process.env.REDMINE_TMS_TASK_NAME);
 
         if (tmsCustomField)
             custom_fields.push({ id: tmsCustomField.id, value: formItem.tms });
     }
 
-    if (formItem.cr) {
-        const crCustomField = customFields.find((i) => i.name === 'SD CR#');
+    if (process.env.REDMINE_CR_NAME && formItem.cr) {
+        const crCustomField = customFields.find((i) => i.name === process.env.REDMINE_CR_NAME);
 
         if (crCustomField)
             custom_fields.push({ id: crCustomField.id, value: formItem.cr });
     }
 
-    if (formItem.issue) {
-        const issueCustomField = customFields.find((i) => i.name === 'SD Issue#');
+    if (process.env.REDMINE_ISSUE_NAME && formItem.issue) {
+        const issueCustomField = customFields.find((i) => i.name === process.env.REDMINE_ISSUE_NAME);
 
         if (issueCustomField)
             custom_fields.push({ id: issueCustomField.id, value: formItem.issue });

@@ -1,9 +1,9 @@
-const axios = require('axios');
-const { getRedmineApiConfiguration, getRedmineAddress } = require('../redmine/tools/redmineConnectionTools');
+const { getRedmineData } = require('../redmine/tools/redmineConnectionTools');
+const softDevDataProvider = require('../softdev/softDevDataProvider');
 const NodeCache = require("node-cache");
 const cache = new NodeCache({ stdTTL: process.env.CACHE_TTL, checkperiod: process.env.CACHE_TTL * 0.2, useClones: false });
 
-async function getValue(key) {
+module.exports.getValue = async (key) => {
 
     let value = cache.get(key);
 
@@ -26,26 +26,27 @@ async function getValue(key) {
 
 const reqisteredCaches = {
     'redmine_projects': async () => {
-        const result = await axios.get(getRedmineAddress('projects.json'), getRedmineApiConfiguration());
-        return result.data.projects.sort((a, b) => a.name.localeCompare(b.name));
+        const result = await getRedmineData('projects.json', true);
+        return result.projects.sort((a, b) => a.name.localeCompare(b.name));
     },
     'redmine_trackers': async () => {
-        const result = await axios.get(getRedmineAddress('trackers.json'), getRedmineApiConfiguration());
-        return result.data.trackers.sort((a, b) => a.name.localeCompare(b.name));
+        const result = await getRedmineData('trackers.json');
+        return result.trackers.sort((a, b) => a.name.localeCompare(b.name));
     },
     'redmine_users': async () => {
-        const result = await axios.get(getRedmineAddress('users.json'), getRedmineApiConfiguration());
-        result.data.users.forEach(user => user.name = `${user.firstname} ${user.lastname}`);
-        return result.data.users.sort((a, b) => a.name.localeCompare(b.name));
+        const result = await getRedmineData('users.json', true);
+        result.users.forEach(user => user.name = `${user.firstname} ${user.lastname}`);
+        return result.users.sort((a, b) => a.name.localeCompare(b.name));
     },
     'redmine_custom_fields': async () => {
-        const result = await axios.get(getRedmineAddress('custom_fields.json'), getRedmineApiConfiguration());
-        return result.data.custom_fields;
+        const result = await getRedmineData('custom_fields.json');
+        return result.custom_fields;
+    },
+    'softdev_projects': async () => {
+        const result = await softDevDataProvider.getVersions();
+        return result.sort((a, b) => a.PRODUCT_VERSION_NAME.localeCompare(b.PRODUCT_VERSION_NAME));
     }
 }
-
-
-module.exports.getValue = getValue;
 
 module.exports.clearCache = async () => {
     console.log('Clearing cache');

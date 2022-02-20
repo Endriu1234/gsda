@@ -19,7 +19,6 @@
 })()
 
 function validateHtmlList(htmlDocument, input, listId, allowEmpty) {
-    console.log('check triggered');
 
     const list = htmlDocument.querySelector(`#${listId}`);
 

@@ -24,7 +24,16 @@ To have this application working correcly those files need to contains below var
 * APP_PORT -> Port on which our application is listening
 * REDMINE_ADDRESS -> Redmine application address
 * REDMINE_API_KEY -> Redmine API Key
+* REDMINE_TMS_TASK_NAME -> Redmine name of field refering to TMS task
+* REDMINE_CR_NAME -> Redmine name of field refering to CR
+* REDMINE_ISSUE_NAME -> Redmine name of field refering to Issue
 * CACHE_TTL -> Cache Time To Live in seconds
 * MONGO_DB_ADRESS -> Mongo DB adress
 * SESSION_SECRET -> Application session secret string
 * SESSION_NAME= Application session name
+* ORACLE_CLIENT_PATH -> path to Oracle Client
+* SOFTDEV_DB_USER -> SoftDev DB user
+* SOFTDEV_DB_PASS -> SoftDev DB pass
+* SOFTDEV_DB_HOST -> SoftDev DB host
+* SOFT_DEV_DB_PORT -> SoftDev DB port
+* SOFT_DEV_DB_SID -> SoftDev SID

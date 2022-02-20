@@ -1,0 +1,81 @@
+<% layout('templates/viewTemplate') %>
+
+<div class="row">
+    <div class="col-12">
+        <h1 class="text-center">Create Items From Regressions</h1>
+        <form action="/itemscreators/createitemsfromregressions" method="POST" novalidate class="validated-form ">
+            <div class="container-fluid">
+                <datalist id="softDevProjectOptions">
+                    <% softDevProjects.forEach(project => { %>
+                        <option value="<%=project.PRODUCT_VERSION_NAME%>">
+                    <% }); %>
+                    </datalist>
+
+                <datalist id="redmineProjectOptions">
+                        <% redmineProjects.forEach(project => { %>
+                            <option value="<%=project.name%>">
+                        <% }); %>
+                        </datalist>
+
+
+                <div class="row align-items-center justify-content-center">
+                    <div class="col-xl-4 col-lg-5">
+                        <div class="input-group">
+                            <span class="input-group-text" id="softDevProjectLabel">Detected Version</span>
+                            <input class="form-control" name="searchData[softdevproject]" list="softDevProjectOptions" id="softDevProject"
+                            value="<%= searchData ? searchData.softdevproject : ""%>"
+                        placeholder="Type to search..." oninput="validateHtmlList(document, this, 'softDevProjectOptions', false)" required>
+                        </div>
+                    </div>
+                    <div class="col-xl-5 col-lg-7">
+
+                        <div class="input-group">
+                            <span class="input-group-text" id="redmineProjectLabel">Redmine Project</span>
+                            <input class="form-control" name="searchData[redmineproject]" list="redmineProjectOptions" id="redmineProject"
+                            value="<%= searchData ? searchData.redmineproject : ""%>"
+                        placeholder="Type to search..." oninput="validateHtmlList(document, this, 'redmineProjectOptions', false)" required>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <button class="btn btn-success ">Find Missing Items</button>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+<div class="row">
+    <% if(softDevIssues) { %>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Issue #</th>
+                <th scope="col">Summary</th>
+                <th scope="col">Registered</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% softDevIssues.forEach(issue => { %>
+            <tr>
+                <th scope="row"><%= issue.ISSUE_ID %></th>
+                <td><%= issue.ISSUE_SUMMARY %></td>
+                <td><%= issue.ISSUE_REGISTERED_BY %></td>
+                <td>
+                    <% if(issue.REDMINE_LINK) { %>
+                    <form action="<%= issue.REDMINE_LINK %>">
+                        <button class="btn btn-primary">Go To Item</button>
+                    </form>
+                    <% } else { %>
+                    <form action="">
+                        <button class="btn btn-success">Create Item</button>
+                    </form>
+                    <% } %>
+                </td>
+            </tr>
+            <% }); %>
+        </tbody>
+    </table>
+    <% } %>
+</div>

@@ -10,8 +10,6 @@ const flash = require('connect-flash');
 const mongoSanitize = require('express-mongo-sanitize');
 
 async function connectToMongo() {
-    console.log(process.env.MONGO_DB_ADRESS);
-
     const db = mongoose.connection;
     db.on('error', console.error.bind(console, 'connection error:'));
     db.once('open', () => { console.log("Database connected") });
@@ -93,8 +91,12 @@ function setupFlashMessages(app) {
     });
 }
 
-module.exports.loadAppConfiguration = (app, directory) => {
+function configurePATH() {
+    process.env['PATH'] = `${process.env.ORACLE_CLIENT_PATH};` + process.env['PATH'];
+}
 
+module.exports.loadAppConfiguration = (app, directory) => {
+    configurePATH();
     connectToMongo();
     setupViewsAndStatic(app, directory);
     setupMiddleWares(app);

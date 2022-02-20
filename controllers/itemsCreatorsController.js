@@ -1,7 +1,8 @@
-const axios = require('axios');
 const cacheValueProvider = require('../business/cache/cacheValueProvider');
-const { convertFormItemObjectToJSON } = require('../business/redmine/posting/formItemObjectToJSONConverter');
-const { getRedmineApiConfiguration, getRedmineAddress } = require('../business/redmine/tools/redmineConnectionTools');
+const { convertFormItemObjectToJSON } = require('../business/redmine/tools/formItemObjectToJSONConverter');
+const { postRedmineJsonData } = require('../business/redmine/tools/redmineConnectionTools');
+const softDevDataProvider = require('../business/softdev/softDevDataProvider');
+const RegressionViewDataPeparer = require('../business/redmine/data_preparing/RegressionViewDataPreparer');
 
 module.exports.renderCreateCustomItem = async (req, res) => {
 
@@ -14,37 +15,28 @@ module.exports.renderCreateCustomItem = async (req, res) => {
 
 module.exports.createCustomItem = async (req, res) => {
     const itemJson = await convertFormItemObjectToJSON(req.body.item);
-    const headersObject = getRedmineApiConfiguration();
-    headersObject.headers['Content-Type'] = 'application/json';
-
-    let success = true;
-
-    const creationResult = await axios.post(getRedmineAddress('issues.json'), itemJson, headersObject).catch(function (error) {
-
-        if (error.response) {
-            // Request made and server responded
-            success = false;
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-        } else if (error.request) {
-            // The request was made but no response was received
-            success = false;
-            console.log(error.request);
-        } else {
-            // Something happened in setting up the request that triggered an Error
-            success = false;
-            console.log('Error', error.message);
-        }
-
-    });
+    let success = postRedmineJsonData('issues.json', itemJson);
 
     if (success) {
         req.flash('success', 'Redmine Item created');
-        res.redirect('/itemscreators/createcustomitem');
+        return res.redirect(req.originalUrl);
     }
     else {
         req.flash('error', 'Redmine Item not created. Something went wrong');
-        res.redirect('/itemscreators/createcustomitem');
+        return res.redirect(req.originalUrl);
     }
+};
+
+module.exports.renderCreateItemsFromRegressions = async (req, res) => {
+    const softDevProjects = await cacheValueProvider.getValue('softdev_projects');
+    const redmineProjects = await cacheValueProvider.getValue('redmine_projects');
+    let softDevIssues;
+
+    if (req.body.searchData) {
+        softDevIssues = await softDevDataProvider.getIssuesFromProject(req.body.searchData.softdevproject);
+        const dataPreparer = new RegressionViewDataPeparer(softDevIssues, req.body.searchData.redmineproject);
+        softDevIssues = await dataPreparer.prepare();
+    }
+
+    res.render('items_creators/createItemsFromRegressions', { softDevProjects, redmineProjects, searchData: req.body.searchData, softDevIssues });
 };
