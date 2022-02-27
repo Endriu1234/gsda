@@ -6,9 +6,11 @@ const createitemsfromregressionsValidator = require('../business/common/validati
 
 const catchAsync = require('../utils/catchAsync');
 
-router.route('/createcustomitem')
-    .get(catchAsync(itemsCreatorsController.renderCreateCustomItem))
-    .post(catchAsync(redmineItemValidator.validateRedmineItem), catchAsync(itemsCreatorsController.createCustomItem));
+router.route('/createitem')
+    .get(catchAsync(itemsCreatorsController.renderCreateItem))
+    .post(catchAsync(redmineItemValidator.validateRedmineItem), catchAsync(itemsCreatorsController.createItem));
+
+router.route('/createitemfromregression').post(catchAsync(itemsCreatorsController.renderCreateItem));
 
 router.route('/createitemsfromregressions')
     .get(catchAsync(itemsCreatorsController.renderCreateItemsFromRegressions))

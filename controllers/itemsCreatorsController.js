@@ -4,18 +4,17 @@ const { postRedmineJsonData } = require('../business/redmine/tools/redmineConnec
 const softDevDataProvider = require('../business/softdev/softDevDataProvider');
 const RegressionViewDataPeparer = require('../business/redmine/data_preparing/RegressionViewDataPreparer');
 
-module.exports.renderCreateCustomItem = async (req, res) => {
-
+module.exports.renderCreateItem = async (req, res) => {
     const projects = await cacheValueProvider.getValue('redmine_projects');
     const trackers = await cacheValueProvider.getValue('redmine_trackers');
     const users = await cacheValueProvider.getValue('redmine_users');
 
-    res.render('items_creators/createCustomItem', { projects, trackers, users });
+    res.render('items_creators/createItem', { projects, trackers, users, issue: req.body.issue });
 };
 
-module.exports.createCustomItem = async (req, res) => {
+module.exports.createItem = async (req, res) => {
     const itemJson = await convertFormItemObjectToJSON(req.body.item);
-    let success = postRedmineJsonData('issues.json', itemJson);
+    let success = await postRedmineJsonData('issues.json', itemJson);
 
     if (success) {
         req.flash('success', 'Redmine Item created');

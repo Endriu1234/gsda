@@ -68,7 +68,14 @@
                         <button class="btn btn-primary">Go To Item</button>
                     </form>
                     <% } else { %>
-                    <form action="">
+                    <form action="/itemscreators/createitemfromregression" method="POST">
+                        <input type="hidden" id="issue_id" name="issue[id]" value="<%= issue.ISSUE_ID %>">
+                        <input type="hidden" id="issue_summary" name="issue[summary]" value="<%= issue.ISSUE_SUMMARY %>">
+                        <input type="hidden" id="issue_description" name="issue[description]" value="<%= issue.ISSUE_DESCRIPTION %>">
+                        <input type="hidden" id="issue_assigned" name="issue[assigned]" value="<%= issue.ISSUE_ASSIGNED_TO %>">
+                        <% let redmineproject = searchData ? searchData.redmineproject : ''%>
+                        <input type="hidden" id="issue_redmineproject" name="issue[redmineproject]" value="<%= redmineproject %>">
+
                         <button class="btn btn-success">Create Item</button>
                     </form>
                     <% } %>

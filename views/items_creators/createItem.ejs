@@ -4,11 +4,12 @@
     <div class="col-12">
         <h1 class="text-center">Create Item</h1>
         <div class="col-lg-8 offset-lg-2">
-            <form action="/itemscreators/createcustomitem" method="POST" novalidate class="validated-form">
-                <div class="mb-3">
-                    <label for="project" class="form-label">Project</label>
+            <form action="/itemscreators/createitem" method="POST" novalidate class="validated-form">
+                <div class="mb-3 input-group">
+                    <% let projectValue = issue ? issue.redmineproject : ''; %>
+                    <span class="input-group-text" id="projectLabel">Project</span>
                     <input class="form-control" name="item[project]" list="projectOptions" id="project" placeholder="Type to search..."
-                        oninput="validateHtmlList(document, this, 'projectOptions', false)" required>
+                        oninput="validateHtmlList(document, this, 'projectOptions', false)" required value="<%=projectValue%>">
 
                     <div class="invalid-feedback">
                         Please select project from the list
@@ -28,25 +29,42 @@
                     </div>
                     <% }); %>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label" for="topic">Subject</label>
-                    <input class="form-control" type="text" id="topic" name="item[subject]" required>
+                <div class="mb-3 input-group">
+                    <% let subjectValue = issue ? issue.summary : ''; %>
+                    <span class="input-group-text" id="subjectLabel">Subject</span>
+                    <input class="form-control" type="text" id="topic" name="item[subject]" required value="<%=subjectValue%>">
                     <div class="valid-feedback">
                         Looks good!
                     </div>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label" for="description">Description</label>
+                <div class="mb-3 input-group">
+                    <% let descriptionValue = issue ? issue.description : ''; %>
+                    <span class="input-group-text" id="descriptionLabel">Description</span>
                     <textarea class="form-control" type="text" id="description" name="item[description]"
-                        required rows="10"></textarea>
+                        required rows="10"><%=descriptionValue%></textarea>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
                 </div>
-                <div class="mb-3">
-                    <label for="assignee" class="form-label">Assignee</label>
+                <div class="mb-3 input-group">
+                    <% let assigneeValue = ''; 
+                       if(issue && issue.assigned){
+                          let spaceIndex = issue.assigned.indexOf(' ');
+         
+                           if(spaceIndex > 0){
+                                let assignedLogin = issue.assigned.substring(0, spaceIndex);
+                                let asigneeUser = users.find(u => u.login === assignedLogin);
+            
+                                if(asigneeUser)
+                                     assigneeValue = asigneeUser.name;
+                            }
+                       }
+                    
+                    %>
+
+                    <span class="input-group-text" id="issueLabel">Assignee</span>
                     <input class="form-control" list="assigneeOptions" name="item[assignee]" id="assignee" placeholder="Type to search..."
-                        oninput="validateHtmlList(document, this, 'assigneeOptions', true)">
+                        oninput="validateHtmlList(document, this, 'assigneeOptions', true)" value="<%=assigneeValue%>">
                     <div class="invalid-feedback">
                         Please select user from the list or leave this field empty
                     </div>
@@ -56,16 +74,18 @@
                         <% }); %>
                         </datalist>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label" for="tms">TMS Task</label>
+                <div class="mb-3 input-group">
+                    <span class="input-group-text" id="issueLabel">TMS Task</span>
                     <input class="form-control" type="text" id="tms" name="item[tms]" pattern="^[A-Z]{4,5}-[\d]{1,9}$">
                 </div>
-                <div class="mb-3">
-                    <label class="form-label" for="issue">Issue</label>
-                    <input class="form-control" type="text" id="issue" name="item[issue]" pattern="^ISS-[A-Z]{3,4}-[\d]{1,9}I[T|S]$">
+                <div class="mb-3 input-group">
+                    <% let issueValue = issue ? issue.id : ''; %>
+                    <span class="input-group-text" id="issueLabel">Issue</span>
+                    <input class="form-control" type="text" id="issue" name="item[issue]" pattern="^ISS-[A-Z]{3,4}-[\d]{1,9}I[T|S]$"
+                    value="<%=issueValue%>">
                 </div>
-                <div class="mb-3">
-                    <label class="form-label" for="cr">CR</label>
+                <div class="mb-3 input-group">
+                    <span class="input-group-text" id="crLabel">CR</span>
                     <input class="form-control" type="text" id="cr" name="item[cr]" pattern="^CR-[A-Z]{3,4}-[\d]{1,9}I[T|S]$">
                 </div>
                 <div class="mb-3">
