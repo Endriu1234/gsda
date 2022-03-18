@@ -9,7 +9,7 @@ module.exports.renderCreateItem = async (req, res) => {
     const trackers = await cacheValueProvider.getValue('redmine_trackers');
     const users = await cacheValueProvider.getValue('redmine_users');
 
-    res.render('items_creators/createItem', { projects, trackers, users, issue: req.body.issue });
+    res.render('items_creators/createItem', { projects, trackers, users, issue: req.body.issue, additionalinfo: req.body.additionalinfo });
 };
 
 module.exports.createItem = async (req, res) => {
@@ -17,6 +17,17 @@ module.exports.createItem = async (req, res) => {
     let success = await postRedmineJsonData('issues.json', itemJson);
 
     if (success) {
+        if (req.body.additionalinfo && req.body.additionalinfo.source === 'regressions') {
+
+            req.body.searchData = {
+                softdevproject: req.body.additionalinfo.softdevproject,
+                redmineproject: req.body.item.project,
+                displaycreated: req.body.additionalinfo.displaycreated
+            };
+
+            return await renderCreateItemsFromRegressions(req, res);
+        }
+
         req.flash('success', 'Redmine Item created');
         return res.redirect(req.originalUrl);
     }
@@ -26,16 +37,18 @@ module.exports.createItem = async (req, res) => {
     }
 };
 
-module.exports.renderCreateItemsFromRegressions = async (req, res) => {
+async function renderCreateItemsFromRegressions(req, res) {
     const softDevProjects = await cacheValueProvider.getValue('softdev_projects');
     const redmineProjects = await cacheValueProvider.getValue('redmine_projects');
     let softDevIssues;
 
     if (req.body.searchData) {
         softDevIssues = await softDevDataProvider.getIssuesFromProject(req.body.searchData.softdevproject);
-        const dataPreparer = new RegressionViewDataPeparer(softDevIssues, req.body.searchData.redmineproject);
+        const dataPreparer = new RegressionViewDataPeparer(softDevIssues, req.body.searchData.redmineproject, req.body.searchData.displaycreated);
         softDevIssues = await dataPreparer.prepare();
     }
 
     res.render('items_creators/createItemsFromRegressions', { softDevProjects, redmineProjects, searchData: req.body.searchData, softDevIssues });
-};
+}
+
+module.exports.renderCreateItemsFromRegressions = renderCreateItemsFromRegressions;

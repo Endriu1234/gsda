@@ -14,6 +14,7 @@ router.route('/createitemfromregression').post(catchAsync(itemsCreatorsControlle
 
 router.route('/createitemsfromregressions')
     .get(catchAsync(itemsCreatorsController.renderCreateItemsFromRegressions))
-    .post(catchAsync(createitemsfromregressionsValidator.validateCreateItemsFromRegressionsForm), catchAsync(itemsCreatorsController.renderCreateItemsFromRegressions));
+    .post(catchAsync(createitemsfromregressionsValidator.validateCreateItemsFromRegressionsForm),
+        catchAsync(itemsCreatorsController.renderCreateItemsFromRegressions));
 
 module.exports = router;

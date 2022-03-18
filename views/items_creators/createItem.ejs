@@ -88,6 +88,14 @@
                     <span class="input-group-text" id="crLabel">CR</span>
                     <input class="form-control" type="text" id="cr" name="item[cr]" pattern="^CR-[A-Z]{3,4}-[\d]{1,9}I[T|S]$">
                 </div>
+
+                <% let issueSource = additionalinfo ? additionalinfo.source : ''; %>
+                <input type="hidden" id="item_source" name="additionalinfo[source]" value="<%= issueSource %>">
+                <% let softDevProject = additionalinfo ? additionalinfo.softdevproject : ''; %>
+                <input type="hidden" id="item_softdevproject" name="additionalinfo[softdevproject]" value="<%= softDevProject %>">
+                <% let displayCreated = additionalinfo ? additionalinfo.displaycreated : ''; %>
+                <input type="hidden" id="item_displaycreated" name="additionalinfo[displaycreated]" value="<%= displayCreated %>">
+
                 <div class="mb-3">
                     <button class="btn btn-success">Create Item</button>
                 </div>

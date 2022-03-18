@@ -18,25 +18,34 @@
                         </datalist>
 
 
-                <div class="row align-items-center justify-content-center">
-                    <div class="col-xl-4 col-lg-5">
-                        <div class="input-group">
+                <div class="row align-items-center ">
+                    <div class="col-12 col-xl-6 col-xxl-5 mt-2">
+                        <div class="input-group ">
                             <span class="input-group-text" id="softDevProjectLabel">Detected Version</span>
                             <input class="form-control" name="searchData[softdevproject]" list="softDevProjectOptions" id="softDevProject"
                             value="<%= searchData ? searchData.softdevproject : ""%>"
                         placeholder="Type to search..." oninput="validateHtmlList(document, this, 'softDevProjectOptions', false)" required>
                         </div>
                     </div>
-                    <div class="col-xl-5 col-lg-7">
+                    <div class="col-12 col-xl-6 col-xxl-5 mt-2">
 
-                        <div class="input-group">
+                        <div class="input-group ">
                             <span class="input-group-text" id="redmineProjectLabel">Redmine Project</span>
                             <input class="form-control" name="searchData[redmineproject]" list="redmineProjectOptions" id="redmineProject"
                             value="<%= searchData ? searchData.redmineproject : ""%>"
                         placeholder="Type to search..." oninput="validateHtmlList(document, this, 'redmineProjectOptions', false)" required>
                         </div>
                     </div>
-                    <div class="col-12 col-md-3">
+                    <div class="col-12 col-md-3  col-xl-2 col-xxl-2 mt-2">
+                        <div class="form-check">
+                            <input class="form-check-input" name="searchData[displaycreated]" type="checkbox" value="true" id="displayCreated"
+                            <%= (searchData && searchData.displaycreated) ? 'checked' : ''%> >
+                            <label class="form-check-label" for="displayCreated">
+                              Display Created
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-4 mt-2">
                         <button class="btn btn-success ">Find Missing Items</button>
                     </div>
                 </div>
@@ -64,9 +73,7 @@
                 <td><%= issue.ISSUE_REGISTERED_BY %></td>
                 <td>
                     <% if(issue.REDMINE_LINK) { %>
-                    <form action="<%= issue.REDMINE_LINK %>">
-                        <button class="btn btn-primary">Go To Item</button>
-                    </form>
+                    <a href="<%= issue.REDMINE_LINK %>" class="btn btn-primary">Go To Item</a>
                     <% } else { %>
                     <form action="/itemscreators/createitemfromregression" method="POST">
                         <input type="hidden" id="issue_id" name="issue[id]" value="<%= issue.ISSUE_ID %>">
@@ -75,6 +82,11 @@
                         <input type="hidden" id="issue_assigned" name="issue[assigned]" value="<%= issue.ISSUE_ASSIGNED_TO %>">
                         <% let redmineproject = searchData ? searchData.redmineproject : ''%>
                         <input type="hidden" id="issue_redmineproject" name="issue[redmineproject]" value="<%= redmineproject %>">
+                        <% let softdevproject = searchData ? searchData.softdevproject : ''%>
+                        <input type="hidden" id="issue_softdevproject" name="additionalinfo[softdevproject]" value="<%= softdevproject %>">
+                        <% let displayCreated = searchData ? searchData.displaycreated : ''%>
+                        <input type="hidden" id="issue_softdevproject" name="additionalinfo[displaycreated]" value="<%= displayCreated %>">
+                        <input type="hidden" id="issue_source" name="additionalinfo[source]" value="<%= 'regressions' %>">
 
                         <button class="btn btn-success">Create Item</button>
                     </form>
