@@ -46,7 +46,7 @@ async function renderCreateItemsFromRegressions(req, res) {
     let regressionsDefaultDisplayCreated;
 
     if (req.body.searchData) {
-        softDevIssues = await softDevDataProvider.getIssuesFromProject(req.body.searchData.softdevproject);
+        softDevIssues = await softDevDataProvider.getRegressionsFromProject(req.body.searchData.softdevproject);
         const dataPreparer = new RegressionViewDataPeparer(softDevIssues, req.body.searchData.redmineproject, req.body.searchData.displaycreated);
         res.cookie('regressionsDefaultSoftDevProject', req.body.searchData.softdevproject, { signed: true });
         res.cookie('regressionsDefaultRedmineProject', req.body.searchData.redmineproject, { signed: true });
