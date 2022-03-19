@@ -41,14 +41,33 @@ async function renderCreateItemsFromRegressions(req, res) {
     const softDevProjects = await cacheValueProvider.getValue('softdev_projects');
     const redmineProjects = await cacheValueProvider.getValue('redmine_projects');
     let softDevIssues;
+    let regressionsDefaultSoftDevProject;
+    let regressionsDefaultRedmineProject;
+    let regressionsDefaultDisplayCreated;
 
     if (req.body.searchData) {
         softDevIssues = await softDevDataProvider.getIssuesFromProject(req.body.searchData.softdevproject);
         const dataPreparer = new RegressionViewDataPeparer(softDevIssues, req.body.searchData.redmineproject, req.body.searchData.displaycreated);
+        res.cookie('regressionsDefaultSoftDevProject', req.body.searchData.softdevproject, { signed: true });
+        res.cookie('regressionsDefaultRedmineProject', req.body.searchData.redmineproject, { signed: true });
+        res.cookie('regressionsDefaultDisplayCreated', req.body.searchData.displaycreated, { signed: true });
         softDevIssues = await dataPreparer.prepare();
     }
+    else {
+        if (req.signedCookies.regressionsDefaultSoftDevProject)
+            regressionsDefaultSoftDevProject = req.signedCookies.regressionsDefaultSoftDevProject;
 
-    res.render('items_creators/createItemsFromRegressions', { softDevProjects, redmineProjects, searchData: req.body.searchData, softDevIssues });
+        if (req.signedCookies.regressionsDefaultRedmineProject)
+            regressionsDefaultRedmineProject = req.signedCookies.regressionsDefaultRedmineProject;
+
+        if (req.signedCookies.regressionsDefaultDisplayCreated)
+            regressionsDefaultDisplayCreated = req.signedCookies.regressionsDefaultDisplayCreated;
+    }
+
+    res.render('items_creators/createItemsFromRegressions', {
+        softDevProjects, redmineProjects, searchData: req.body.searchData, softDevIssues,
+        regressionsDefaultSoftDevProject, regressionsDefaultRedmineProject, regressionsDefaultDisplayCreated
+    });
 }
 
 module.exports.renderCreateItemsFromRegressions = renderCreateItemsFromRegressions;

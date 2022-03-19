@@ -8,6 +8,7 @@ const MongoStore = require('connect-mongo');
 const session = require('express-session');
 const flash = require('connect-flash');
 const mongoSanitize = require('express-mongo-sanitize');
+const cookieParser = require('cookie-parser');
 
 async function connectToMongo() {
     const db = mongoose.connection;
@@ -27,6 +28,7 @@ function setupViewsAndStatic(app, directory) {
 
 function setupMiddleWares(app) {
     app.use(express.urlencoded({ extended: true }));
+    app.use(cookieParser(process.env.SESSION_SECRET));
     app.use(methodOverride('_method'));
     app.use(mongoSanitize(
         {

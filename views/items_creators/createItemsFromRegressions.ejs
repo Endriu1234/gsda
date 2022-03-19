@@ -3,13 +3,15 @@
 <div class="row">
     <div class="col-12">
         <h1 class="text-center">Create Items From Regressions</h1>
-        <form action="/itemscreators/createitemsfromregressions" method="POST" novalidate class="validated-form ">
+
+        <form action="/itemscreators/createitemsfromregressions" method="<%= searchData ? 'GET' : 'POST' %>" novalidate
+            class="validated-form ">
             <div class="container-fluid">
                 <datalist id="softDevProjectOptions">
                     <% softDevProjects.forEach(project => { %>
-                        <option value="<%=project.PRODUCT_VERSION_NAME%>">
-                    <% }); %>
-                    </datalist>
+        <option value="<%=project.PRODUCT_VERSION_NAME%>">
+            <% }); %>
+            </datalist>
 
                 <datalist id="redmineProjectOptions">
                         <% redmineProjects.forEach(project => { %>
@@ -17,36 +19,65 @@
                         <% }); %>
                         </datalist>
 
-
                 <div class="row align-items-center ">
                     <div class="col-12 col-xl-6 col-xxl-5 mt-2">
                         <div class="input-group ">
                             <span class="input-group-text" id="softDevProjectLabel">Detected Version</span>
+
+                            <% let softDevProject = '';
+                               
+                               if(searchData)
+                                    softDevProject = searchData.softdevproject;
+                                else if(regressionsDefaultSoftDevProject !== undefined)
+                                    softDevProject = regressionsDefaultSoftDevProject;
+                            %>
+
                             <input class="form-control" name="searchData[softdevproject]" list="softDevProjectOptions" id="softDevProject"
-                            value="<%= searchData ? searchData.softdevproject : ""%>"
-                        placeholder="Type to search..." oninput="validateHtmlList(document, this, 'softDevProjectOptions', false)" required>
+                            value="<%= softDevProject %>"
+                            <%= searchData ? 'disabled' : '' %>
+                            placeholder="Type to search..." oninput="validateHtmlList(document, this,
+                            'softDevProjectOptions', false)" required>
                         </div>
                     </div>
                     <div class="col-12 col-xl-6 col-xxl-5 mt-2">
 
                         <div class="input-group ">
                             <span class="input-group-text" id="redmineProjectLabel">Redmine Project</span>
+
+                            <% let redmineProject = '';
+                               
+                            if(searchData)
+                                redmineProject = searchData.redmineproject;
+                             else if(regressionsDefaultRedmineProject !== undefined)
+                                redmineProject = regressionsDefaultRedmineProject;
+                            %>
+
                             <input class="form-control" name="searchData[redmineproject]" list="redmineProjectOptions" id="redmineProject"
-                            value="<%= searchData ? searchData.redmineproject : ""%>"
+                            value="<%= redmineProject %>"
+                            <%= searchData ? 'disabled' : '' %>
                         placeholder="Type to search..." oninput="validateHtmlList(document, this, 'redmineProjectOptions', false)" required>
                         </div>
                     </div>
                     <div class="col-12 col-md-3  col-xl-2 col-xxl-2 mt-2">
                         <div class="form-check">
+                            <% let displayCreated = '';
+                               
+                            if(searchData)
+                                displayCreated = searchData.displaycreated;
+                             else if(regressionsDefaultDisplayCreated !== undefined)
+                                displayCreated = regressionsDefaultDisplayCreated;
+                            %>
+
                             <input class="form-check-input" name="searchData[displaycreated]" type="checkbox" value="true" id="displayCreated"
-                            <%= (searchData && searchData.displaycreated) ? 'checked' : ''%> >
+                            <%= (displayCreated === 'true') ? 'checked' : ''%>
+                            <%= searchData ? 'disabled' : '' %> >
                             <label class="form-check-label" for="displayCreated">
                               Display Created
                             </label>
                         </div>
                     </div>
                     <div class="col-6 col-md-4 mt-2">
-                        <button class="btn btn-success ">Find Missing Items</button>
+                        <button class="btn btn-success "><%= searchData ? 'Clear' : 'Find Missing Items' %></button>
                     </div>
                 </div>
             </div>
