@@ -42,7 +42,7 @@ module.exports.getVersions = async () => {
             AND prd_version.prv_is_active = 'Y'`);
 };
 
-module.exports.getRegressionsFromProject = async (softDevProjectName) => {
+module.exports.getRegressionsFromVersion = async (softDevProjectName) => {
     const softDevProjects = await cacheValueProvider.getValue('softdev_projects');
     const project = softDevProjects.find(p => p.PRODUCT_VERSION_NAME === softDevProjectName);
 
