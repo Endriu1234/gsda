@@ -48,9 +48,9 @@ async function renderCreateItemsFromRegressions(req, res) {
     if (req.body.searchData) {
         softDevIssues = await softDevDataProvider.getRegressionsFromProject(req.body.searchData.softdevproject);
         const dataPreparer = new RegressionViewDataPeparer(softDevIssues, req.body.searchData.redmineproject, req.body.searchData.displaycreated);
-        res.cookie('regressionsDefaultSoftDevProject', req.body.searchData.softdevproject, { signed: true });
-        res.cookie('regressionsDefaultRedmineProject', req.body.searchData.redmineproject, { signed: true });
-        res.cookie('regressionsDefaultDisplayCreated', req.body.searchData.displaycreated, { signed: true });
+        res.cookie('regressionsDefaultSoftDevProject', req.body.searchData.softdevproject, { maxAge: process.env.COOKIE_MAX_AGE, signed: true });
+        res.cookie('regressionsDefaultRedmineProject', req.body.searchData.redmineproject, { maxAge: process.env.COOKIE_MAX_AGE, signed: true });
+        res.cookie('regressionsDefaultDisplayCreated', req.body.searchData.displaycreated, { maxAge: process.env.COOKIE_MAX_AGE, signed: true });
         softDevIssues = await dataPreparer.prepare();
     }
     else {

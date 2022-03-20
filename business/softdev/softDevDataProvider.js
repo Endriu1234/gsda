@@ -1,6 +1,5 @@
 const cacheValueProvider = require('../cache/cacheValueProvider');
 const oracledb = require('oracledb');
-const e = require('connect-flash');
 oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;
 
 async function executeSoftDevQuery(query) {
