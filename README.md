@@ -37,3 +37,4 @@ To have this application working correcly those files need to contains below var
 * SOFTDEV_DB_HOST -> SoftDev DB host
 * SOFT_DEV_DB_PORT -> SoftDev DB port
 * SOFT_DEV_DB_SID -> SoftDev SID
+* COOKIE_MAX_AGE -> Cookie Max Age
