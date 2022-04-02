@@ -142,15 +142,10 @@ module.exports.loadConfiguaration = (app) => {
 };
 
 module.exports.isUserLogged = (req, res, next) => {
-    console.log('isLoginInStarting');
-
     if (!req.isAuthenticated()) {
-        console.log('isLoginIn Not Sutentincated');
-        //console.log(req.path, req.originalUrl);
         req.session.returnTo = req.originalUrl;
         req.flash('error', 'You must be logged in');
         return res.redirect('/login');
     }
-    console.log('isLoginIn GOOD');
     next();
 }
