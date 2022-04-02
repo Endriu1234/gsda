@@ -41,21 +41,24 @@
       <ul class="navbar-nav">
         <li class="nav-item dropdown">
           <a
+              title="<%= currentUser ? `Logged as ${currentUser.displayname}` : 'No user logged'%>"
               class="nav-link dropdown-toggle ms-2"
               href="#"
               role="button"
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              <i class="bi bi-person-fill"></i>
+              <i class="<%= currentUser ? 'bi bi-person-check-fill' : 'bi bi-person-dash-fill'%>"></i>
             </a>
+          <% if(currentUser) {%>
           <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li>
-              <a class="dropdown-item" href="#">Something else here</a>
-            </li>
+            <li><a class="dropdown-item" href="/logout">Log Out</a></li>
           </ul>
+          <% } else { %>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="/login">Log In</a></li>
+          </ul>
+          <% } %>
         </li>
       </ul>
     </div>

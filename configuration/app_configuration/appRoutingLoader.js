@@ -12,6 +12,10 @@ module.exports.loadRouting = (app) => {
         res.render('home');
     });
 
+    app.get('/login', (req, res) => {
+        res.render('login');
+    });
+
     app.all('*', (req, res, next) => {
         next(new ExpressError('Page not found.', 404));
     })

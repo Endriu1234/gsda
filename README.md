@@ -38,3 +38,8 @@ To have this application working correcly those files need to contains below var
 * SOFT_DEV_DB_PORT -> SoftDev DB port
 * SOFT_DEV_DB_SID -> SoftDev SID
 * COOKIE_MAX_AGE -> Cookie Max Age
+* LDAP_URL -> LDAP service address 
+* LDAP_USER_DN -> LDAP user dn
+* LDAP_USERNAME_ATTRIBUTE -> LDAP username attribute
+* LDAP_SEARCH_BASE -> LDAP search base
+* LDAP_SEARCH_FILTER -> LDAP search filter

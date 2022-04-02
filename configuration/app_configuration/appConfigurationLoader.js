@@ -9,6 +9,8 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const mongoSanitize = require('express-mongo-sanitize');
 const cookieParser = require('cookie-parser');
+const appSecurityConfigurationLoader = require('./appSecurityConfigurationLoader');
+
 
 async function connectToMongo() {
     const db = mongoose.connection;
@@ -85,12 +87,17 @@ function setupSession(app) {
 
 function setupFlashMessages(app) {
     app.use(flash());
-
     app.use((req, res, next) => {
+
         res.locals.success = req.flash('success');
         res.locals.error = req.flash('error');
         next();
     });
+}
+
+function setupSecurity(app) {
+    appSecurityConfigurationLoader.loadConfiguaration(app);
+
 }
 
 function configurePATH() {
@@ -104,5 +111,6 @@ module.exports.loadAppConfiguration = (app, directory) => {
     setupMiddleWares(app);
     setupSession(app);
     setupFlashMessages(app);
+    setupSecurity(app);
 }
 
