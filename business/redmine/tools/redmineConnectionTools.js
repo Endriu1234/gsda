@@ -69,3 +69,14 @@ module.exports.postRedmineJsonData = async (endpoint, jsonData) => {
 
     return success;
 }
+
+module.exports.putRedmineJsonData = async (endpoint, jsonData) => {
+    let success = true;
+
+    const creationResult = await axios.put(getRedmineAddress(endpoint), jsonData, getRedmineApiConfiguration()).catch((error) => {
+        success = false;
+        logError(error);
+    });
+
+    return success;
+}

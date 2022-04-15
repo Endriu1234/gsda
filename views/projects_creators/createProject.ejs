@@ -1,0 +1,70 @@
+<% layout('templates/viewTemplate') %>
+
+<div class="row">
+    <div class="col-12">
+        <h1 class="text-center">Create Project</h1>
+        <div class="col-lg-8 offset-lg-2">
+            <form action="/projectscreators/createproject" method="POST" novalidate class="validated-form">
+                <div class="mb-3 input-group">
+                    <span class="input-group-text" id="nameLabel">Name</span>
+                    <input class="form-control" type="text" id="name" name="project[name]" required value="">
+                </div>
+                <div class="mb-3 input-group">
+                    <span class="input-group-text" id="identfierLabel">Identifier</span>
+                    <input class="form-control" type="text" id="identifier" name="project[identifier]"
+                    required pattern="^[_\-0-9a-z]{1,100}$" value="">
+                    <div class="invalid-feedback">
+                        Length between 1 and 100 characters. Only lower case letters (a-z), numbers, dashes and
+                        underscores are allowed.
+                    </div>
+                </div>
+                <div class="mb-3 input-group">
+                    <span class="input-group-text" id="parentProjectLabel">Parent Project</span>
+                    <input class="form-control" name="project[parent_project]" list="projectOptions" id="parentProject" placeholder="Type to search..."
+                    oninput="validateHtmlList(document, this, 'projectOptions', false)" value="">
+
+                    <datalist id="projectOptions">
+                        <% projects.forEach(project => { %>
+                            <option value="<%=project.name%>">
+                        <% }); %>
+                        </datalist>
+                </div>
+                <div class="mb-3 input-group">
+                    <span class="input-group-text" id="descriptionLabel">Description</span>
+                    <textarea class="form-control" type="text" id="description" name="project[description]"
+                        required rows="4"></textarea>
+                </div>
+
+                <div class="container-fluid">
+                    <div class="row align-items-start ">
+                        <div class="col-4 col-sm-2 col-md-1 mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" name="project[public]" type="checkbox" value="true" id="public" checked>
+                                <label class="form-check-label" for="public">
+                                  Public
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-8 col-sm-10 col-md-11">
+                            <div class="form-check">
+                                <input class="form-check-input" name="project[inherit_members]" type="checkbox" value="true" id="public" checked>
+                                <label class="form-check-label" for="public">
+                                    Inherit members
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3 input-group">
+                    <span class="input-group-text" id="wikiLabel">Wiki</span>
+                    <textarea class="form-control" type="text" id="wiki" name="project[wiki]" rows="8"></textarea>
+                </div>
+
+                <div class="mb-3 mt-3">
+                    <button class="btn btn-success">Create Project</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

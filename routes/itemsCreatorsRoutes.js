@@ -9,7 +9,7 @@ const catchAsync = require('../utils/catchAsync');
 
 router.route('/createitem')
     .get(isUserLogged, catchAsync(itemsCreatorsController.renderCreateItem))
-    .post(catchAsync(redmineItemValidator.validateRedmineItem), catchAsync(itemsCreatorsController.createItem));
+    .post(isUserLogged, catchAsync(redmineItemValidator.validateRedmineItem), catchAsync(itemsCreatorsController.createItem));
 
 router.route('/createitemfromregression').post(catchAsync(itemsCreatorsController.renderCreateItem));
 

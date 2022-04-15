@@ -79,7 +79,7 @@ function setupSession(app) {
         cookie: {
             httpOnly: true,
             expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
-            maxAge: process.env.COOKIE_MAX_AGE
+            maxAge: Number(process.env.COOKIE_MAX_AGE)
         }
     }
     app.use(session(sessionConfig));

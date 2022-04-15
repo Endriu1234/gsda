@@ -48,6 +48,11 @@ const reqisteredCaches = {
     }
 }
 
+module.exports.deleteValue = async (key) => {
+
+    return cache.del(key);
+}
+
 module.exports.clearCache = async () => {
     console.log('Clearing cache');
     cache.flushAll();

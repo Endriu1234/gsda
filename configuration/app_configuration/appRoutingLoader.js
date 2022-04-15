@@ -1,11 +1,13 @@
-const itemCreatorsRoutes = require('../../routes/itemsCreatorsRoutes');
+const itemsCreatorsRoutes = require('../../routes/itemsCreatorsRoutes');
+const projectsCreatorsRoutes = require('../../routes/projectsCreatorsRoutes');
 const setupRoutes = require('../../routes/setupRoutes');
 
 const ExpressError = require('../../utils/ExpressError');
 
 module.exports.loadRouting = (app) => {
 
-    app.use('/itemscreators', itemCreatorsRoutes);
+    app.use('/itemscreators', itemsCreatorsRoutes);
+    app.use('/projectscreators', projectsCreatorsRoutes);
     app.use('/setup', setupRoutes);
 
     app.get('/', (req, res) => {
