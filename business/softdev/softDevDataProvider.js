@@ -33,13 +33,25 @@ module.exports.getVersions = async () => {
     return await executeSoftDevQuery(
         `SELECT 
             prd_version.aa_id AS product_version_id,
-            prd_version.prv_version AS product_version_name
+            prd_version.prv_version AS product_version_name, 
+            proj.pj_svn_branch AS product_branch,
+            proj.pj_release_candidate AS product_release_candidate,
+            proj.pj_dev_start AS product_dev_start,
+            proj.pj_dev_end AS product_dev_end,  
+            proj.pj_test_start AS product_test_start,   
+            proj.pj_test_end AS product_test_end, 
+            proj.pj_delivery_date product_delivery_date, 
+            (SELECT gus_user_firstname || ' ' || gus_user_lastname FROM sd_live.global_users WHERE aa_id = proj.pj_testing_mngr_aa) AS product_testing_mgr,
+            (SELECT gus_user_firstname || ' ' || gus_user_lastname FROM sd_live.global_users WHERE aa_id = proj.pj_program_mngr_aa) AS product_programming_mgr,
+            (SELECT gus_user_firstname || ' ' || gus_user_lastname FROM sd_live.global_users WHERE aa_id =  proj.pj_project_mngr_aa) AS product_project_mgr 
         FROM 
-            sd_live.prod_version prd_version, sd_live.product product
+            sd_live.prod_version prd_version, sd_live.product product, sd_live.project proj
         WHERE 
             prd_version.prv_product_aa = product.aa_id
             AND product.prd_id = 'GENE'
-            AND prd_version.prv_is_active = 'Y'`);
+            AND prd_version.prv_is_active = 'Y'
+            AND proj.pj_version_aa = prd_version.aa_id
+            AND proj.pj_status not in ('Canceled', 'Closed', 'Delivered', 'Doc Reviewed', 'Doc Created', 'Finished', 'Scope Approved')`);
 };
 
 module.exports.getRegressionsFromVersion = async (softDevProjectName) => {

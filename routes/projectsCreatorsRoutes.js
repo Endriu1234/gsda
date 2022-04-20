@@ -10,4 +10,8 @@ router.route('/createproject')
     .get(isUserLogged, catchAsync(projectsCreatorsController.renderCreateProject))
     .post(isUserLogged, catchAsync(redmineProjectValidator.validateRedmineProject), catchAsync(projectsCreatorsController.createProject));
 
+router.route('/createprojectfromsdproject')
+    .get(isUserLogged, catchAsync(projectsCreatorsController.renderCreateProjectFromSDProject))
+    .post(isUserLogged, catchAsync(projectsCreatorsController.renderCreateProject));
+
 module.exports = router;

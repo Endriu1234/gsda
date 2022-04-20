@@ -1,0 +1,36 @@
+<% layout('templates/viewTemplate') %>
+
+<div class="row">
+
+    <div class="col-12">
+        <h1 class="text-center">Create Project From SD Project</h1>
+    </div>
+</div>
+
+<div class="row">
+    <form action="/projectscreators/createprojectfromsdproject" method="POST" novalidate class="validated-form">
+        <div class="container-fluid">
+            <datalist id="softDevProjectOptions">
+                <% softDevProjects.forEach(project => { %>
+                     <option value="<%=project.PRODUCT_VERSION_NAME%>">
+                <% }); %>
+            </datalist>
+
+            <div class="row align-items-center mt-5">
+                <div
+                    class="col-12 col-sm-9 col-md-7 offset-md-1 col-lg-6 offset-lg-2 col-xl-5 offset-xl-3 col-xxl-4 offset-xl-3 offset-xxl-3  mt-3">
+                    <div class="input-group ">
+                        <span class="input-group-text" id="softDevProjectLabel">Version</span>
+                        <input class="form-control" name="softdevproject" list="softDevProjectOptions" id="softDevProject"
+                        placeholder="Type to search..." oninput="validateHtmlList(document, this,'softDevProjectOptions', false)" required>
+                    </div>
+                </div>
+                <div class="col-4 col-sm-3 col-md-3 col-lg-2 col-xl-2 mt-3">
+                    <button class="btn btn-success ">Load Defaults</button>
+                </div>
+            </div>
+
+        </div>
+</div>
+</form>
+</div>

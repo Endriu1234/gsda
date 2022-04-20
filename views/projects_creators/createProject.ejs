@@ -7,12 +7,14 @@
             <form action="/projectscreators/createproject" method="POST" novalidate class="validated-form">
                 <div class="mb-3 input-group">
                     <span class="input-group-text" id="nameLabel">Name</span>
-                    <input class="form-control" type="text" id="name" name="project[name]" required value="">
+                    <% let projectName = sd_project ? sd_project.PRODUCT_VERSION_NAME : '' %>
+                    <input class="form-control" type="text" id="name" name="project[name]" required value="<%=projectName%>">
                 </div>
                 <div class="mb-3 input-group">
                     <span class="input-group-text" id="identfierLabel">Identifier</span>
+                    <% let projectIdentifier = sd_project ? sd_project.PRODUCT_VERSION_NAME.toLowerCase().replaceAll('.', '_').replaceAll(',', '_') : '' %>
                     <input class="form-control" type="text" id="identifier" name="project[identifier]"
-                    required pattern="^[_\-0-9a-z]{1,100}$" value="">
+                    required pattern="^[_\-0-9a-z]{1,100}$" value="<%=projectIdentifier%>">
                     <div class="invalid-feedback">
                         Length between 1 and 100 characters. Only lower case letters (a-z), numbers, dashes and
                         underscores are allowed.
@@ -37,7 +39,7 @@
 
                 <div class="container-fluid">
                     <div class="row align-items-start ">
-                        <div class="col-4 col-sm-2 col-md-1 mb-3">
+                        <div class="col-4 col-sm-2 col-md-3 col-xl-2 mb-3">
                             <div class="form-check">
                                 <input class="form-check-input" name="project[public]" type="checkbox" value="true" id="public" checked>
                                 <label class="form-check-label" for="public">
@@ -45,7 +47,7 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="col-8 col-sm-10 col-md-11">
+                        <div class="col-8 col-sm-10 col-md-9 col-xl-10">
                             <div class="form-check">
                                 <input class="form-check-input" name="project[inherit_members]" type="checkbox" value="true" id="public" checked>
                                 <label class="form-check-label" for="public">
@@ -58,11 +60,51 @@
 
                 <div class="mb-3 input-group">
                     <span class="input-group-text" id="wikiLabel">Wiki</span>
-                    <textarea class="form-control" type="text" id="wiki" name="project[wiki]" rows="8"></textarea>
-                </div>
+                    <% 
+                    let wikiText = '';
+                    
+                    if(sd_project){
+                        wikiText =  
+`h1. Information about ??${sd_project.PRODUCT_VERSION_NAME}?? project
 
-                <div class="mb-3 mt-3">
-                    <button class="btn btn-success">Create Project</button>
+h2. General Info:
+
+* Branch: ${sd_project.PRODUCT_BRANCH}
+* Release Candidate: ${sd_project.PRODUCT_RELEASE_CANDIDATE}
+                         
+h2. Dates:
+
+* Development Start: ${sd_project.PRODUCT_DEV_START.toLocaleDateString('en-US')}
+* Development End: ${sd_project.PRODUCT_DEV_END.toLocaleDateString('en-US')}
+* Testing Start: ${sd_project.PRODUCT_TEST_START.toLocaleDateString('en-US')}
+* Testing End: ${sd_project.PRODUCT_TEST_END.toLocaleDateString('en-US')}
+* Delivery: ${sd_project.PRODUCT_DELIVERY_DATE.toLocaleDateString('en-US')}
+
+h2. People:
+                         
+* Project Manager: ${sd_project.PRODUCT_PROJECT_MGR}
+* Programming Manager: ${sd_project.PRODUCT_PROGRAMMING_MGR}
+* Testing Manager: ${sd_project.PRODUCT_TESTING_MGR}`;
+                        
+                    }
+                    
+                    %>
+                    <textarea class="form-control" type="text" id="wiki" name="project[wiki]" rows="8"><%=wikiText%></textarea>
+                </div>
+                <div class="container-fluid  px-0">
+                    <div class="row align-items-center justify-content-start gx-0">
+                        <div class="col-5 col-sm-4 col-md-3 col-lg-3 col-xl-3 col-xxl-2 ml-0">
+                            <button class="btn btn-success">Create Project</button>
+                        </div>
+                        <div class="col-7 col-sm-8 col-md-9 col-lg-9 col-xl-9 col-xxl-10">
+                            <div class="form-check">
+                                <input class="form-check-input" name="project[open_after_creation]" type="checkbox" value="true" id="public" checked>
+                                <label class="form-check-label" for="public">
+                                    Open After Creation
+                                </label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>
